@@ -2,15 +2,13 @@ import React from 'react'
 import SingleBook from './SingleBook'
 import { Col, Container, Form, Row } from 'react-bootstrap'
 import CommentArea from './CommentArea'
+import { useState } from 'react'
 
-class BookList extends React.Component {
 
-    state = {
-        searchQuery: '',
-        selectedBook: null
-    }
+function BookList(props) {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedBook, setSelectedBook] = useState('');
 
-    render() {
         return (
             <Container>
                 <Row>
@@ -22,35 +20,31 @@ class BookList extends React.Component {
                                     <Form.Control
                                         type="text"
                                         placeholder="Search here"
-                                        value={this.state.searchQuery}
-                                        onChange={e => this.setState({ searchQuery: e.target.value })}
+                                        value={searchQuery}
+                                        onChange={e => setSearchQuery(e.target.value )}
                                     />
                                 </Form.Group>
                             </Col>
                         </Row>
                         <Row>
                             {
-                                this.props.books.filter(b => b.title.toLowerCase().includes(this.state.searchQuery)).map(b => (
+                                props.books.filter(b => b.title.toLowerCase().includes(searchQuery)).map(b => (
                                     <Col xs={3} key={b.asin} >
                                         <SingleBook
                                             book={b}
-                                            selectedBook={this.state.selectedBook}
-                                            changeSelectedBook={asin => this.setState({
-                                                selectedBook: asin
-                                            })} />
+                                            selectedBook={selectedBook}
+                                            changeSelectedBook={asin => setSelectedBook({selectedBook: asin })} />
                                     </Col>
                                 ))
                             }
                         </Row>
                     </Col>
                     <Col md={4}>
-                        <CommentArea asin={this.state.selectedBook} />
+                        <CommentArea asin={selectedBook} />
                     </Col>
                 </Row>
             </Container>
         )
-    }
-
 }
 
 export default BookList
